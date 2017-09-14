@@ -16,6 +16,8 @@ import java.util.Map;
 public class MySourceTask extends SourceTask {
   static final Logger log = LoggerFactory.getLogger(MySourceTask.class);
 
+  private ColormeShopAPIHttpClient colormeShopAPIHttpClient;
+
   @Override
   public String version() {
     return VersionUtil.getVersion();
@@ -23,7 +25,7 @@ public class MySourceTask extends SourceTask {
 
   @Override
   public void start(Map<String, String> map) {
-    //TODO: Do things here that are required to start your task. This could be open a connection to a database, etc.
+    colormeShopAPIHttpClient = new ColormeShopAPIHttpClient();
   }
 
   @Override
