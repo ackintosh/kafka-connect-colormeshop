@@ -1,5 +1,6 @@
 package com.github.ackintosh.kafka.connect;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -22,21 +23,19 @@ public class MySourceConnector extends SourceConnector {
   @Override
   public void start(Map<String, String> map) {
     config = new MySourceConnectorConfig(map);
-
-    //TODO: Add things you need to do to setup your connector.
   }
 
   @Override
   public Class<? extends Task> taskClass() {
-    //TODO: Return your task implementation.
     return MySourceTask.class;
   }
 
   @Override
   public List<Map<String, String>> taskConfigs(int i) {
-    //TODO: Define the individual task configurations that will be executed.
+    ArrayList<Map<String, String>> configs = new ArrayList<>(1);
+    configs.add(config.originalsStrings());
 
-    throw new UnsupportedOperationException("This has not been implemented.");
+    return configs;
   }
 
   @Override

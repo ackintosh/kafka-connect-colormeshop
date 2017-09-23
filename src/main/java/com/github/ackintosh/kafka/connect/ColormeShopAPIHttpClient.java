@@ -26,6 +26,6 @@ public class ColormeShopAPIHttpClient {
             e.printStackTrace();
             return new JSONArray();
         }
+        return null;
     }
-
 }
