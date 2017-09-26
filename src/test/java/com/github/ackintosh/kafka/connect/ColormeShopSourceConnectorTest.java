@@ -2,7 +2,7 @@ package com.github.ackintosh.kafka.connect;
 
 import org.junit.Test;
 
-public class MySourceConnectorTest {
+public class ColormeShopSourceConnectorTest {
   @Test
   public void test() {
     // Congrats on a passing test!

@@ -6,14 +6,13 @@ import java.util.Map;
 
 import org.apache.kafka.common.config.ConfigDef;
 import org.apache.kafka.connect.connector.Task;
-import org.apache.kafka.connect.errors.ConnectException;
 import org.apache.kafka.connect.source.SourceConnector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class MySourceConnector extends SourceConnector {
-  private static Logger log = LoggerFactory.getLogger(MySourceConnector.class);
-  private MySourceConnectorConfig config;
+public class ColormeShopSourceConnector extends SourceConnector {
+  private static Logger log = LoggerFactory.getLogger(ColormeShopSourceConnector.class);
+  private ColormeShopSourceConnectorConfig config;
 
   @Override
   public String version() {
@@ -22,12 +21,12 @@ public class MySourceConnector extends SourceConnector {
 
   @Override
   public void start(Map<String, String> map) {
-    config = new MySourceConnectorConfig(map);
+    config = new ColormeShopSourceConnectorConfig(map);
   }
 
   @Override
   public Class<? extends Task> taskClass() {
-    return MySourceTask.class;
+    return ColormeShopSourceTask.class;
   }
 
   @Override
@@ -45,6 +44,6 @@ public class MySourceConnector extends SourceConnector {
 
   @Override
   public ConfigDef config() {
-    return MySourceConnectorConfig.conf();
+    return ColormeShopSourceConnectorConfig.conf();
   }
 }

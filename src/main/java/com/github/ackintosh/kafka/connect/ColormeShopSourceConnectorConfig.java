@@ -8,16 +8,16 @@ import org.apache.kafka.common.config.ConfigDef.Importance;
 import java.util.Map;
 
 
-public class MySourceConnectorConfig extends AbstractConfig {
+public class ColormeShopSourceConnectorConfig extends AbstractConfig {
 
   public static final String MY_SETTING_CONFIG = "my.setting";
   private static final String MY_SETTING_DOC = "This is a setting important to my connector.";
 
-  public MySourceConnectorConfig(ConfigDef config, Map<String, String> parsedConfig) {
+  public ColormeShopSourceConnectorConfig(ConfigDef config, Map<String, String> parsedConfig) {
     super(config, parsedConfig);
   }
 
-  public MySourceConnectorConfig(Map<String, String> parsedConfig) {
+  public ColormeShopSourceConnectorConfig(Map<String, String> parsedConfig) {
     this(conf(), parsedConfig);
   }
 
