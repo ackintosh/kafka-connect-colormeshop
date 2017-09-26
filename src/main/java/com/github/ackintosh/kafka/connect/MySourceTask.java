@@ -7,6 +7,7 @@ import org.apache.kafka.connect.data.Struct;
 import org.apache.kafka.connect.errors.ConnectException;
 import org.apache.kafka.connect.source.SourceRecord;
 import org.apache.kafka.connect.source.SourceTask;
+import org.json.JSONArray;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,13 +29,15 @@ public class MySourceTask extends SourceTask {
   @Override
   public void start(Map<String, String> map) {
     System.out.println("------- start --------");
-//    colormeShopAPIHttpClient = new ColormeShopAPIHttpClient();
+    colormeShopAPIHttpClient = new ColormeShopAPIHttpClient();
   }
 
   @Override
   public List<SourceRecord> poll() throws InterruptedException {
     System.out.println("------- poll --------");
     final ArrayList<SourceRecord> records = new ArrayList<>();
+    JSONArray sales = colormeShopAPIHttpClient.getNextSales();
+    log.debug(sales.toString());
     records.add(generateSourceRecord());
 
     return records;

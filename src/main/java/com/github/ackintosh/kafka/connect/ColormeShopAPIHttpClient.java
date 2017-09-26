@@ -17,15 +17,17 @@ public class ColormeShopAPIHttpClient {
     }
 
     protected JSONArray getNextSales() throws InterruptedException {
-        GetRequest unirest = Unirest.get("https://api.shop-pro.jp/v1/sales.json");
-        log.debug(String.format("GET %s", unirest.getUrl()));
+        GetRequest request = Unirest.get("https://api.shop-pro.jp/v1/sales.json")
+                .header("Authorization", "Bearer xxx");
+        log.debug(String.format("GET %s", request.getUrl()));
 
         try {
-            HttpResponse<JsonNode> response = unirest.asJson();
+            HttpResponse<JsonNode> response = request.asJson();
+            log.debug(String.format("%d: %s", response.getStatus(), response.getStatusText()));
+            return response.getBody().getArray();
         } catch (UnirestException e) {
             e.printStackTrace();
             return new JSONArray();
         }
-        return null;
     }
 }
