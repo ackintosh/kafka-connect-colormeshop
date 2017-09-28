@@ -36,7 +36,7 @@ public class ColormeShopSourceTask extends SourceTask {
     final ArrayList<SourceRecord> records = new ArrayList<>();
     JSONArray sales = colormeShopAPIHttpClient.getNextSales();
     log.debug(sales.toString());
-    records.add(generateSourceRecord());
+    records.add(generateSourceRecord(sales));
 
     return records;
   }
@@ -46,14 +46,14 @@ public class ColormeShopSourceTask extends SourceTask {
     //TODO: Do whatever is required to stop your task.
   }
 
-  private SourceRecord generateSourceRecord() {
+  private SourceRecord generateSourceRecord(JSONArray sales) {
     return new SourceRecord(
             sourcePartition(),
             sourceOffset(),
             "mysourcetopic",
             null, // partition will be inferred by the framework
             buildValueSchema(),
-            buildRecordValue()
+            buildRecordValue(sales)
     );
   }
 
@@ -76,8 +76,8 @@ public class ColormeShopSourceTask extends SourceTask {
             .build();
   }
 
-  private Struct buildRecordValue() {
+  private Struct buildRecordValue(JSONArray sales) {
     return new Struct(buildValueSchema())
-            .put("testvalue", "fooooooooooo");
+            .put("testvalue", sales.toString());
   }
 }
