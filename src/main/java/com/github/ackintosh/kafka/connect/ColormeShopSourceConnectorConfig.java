@@ -10,23 +10,22 @@ import java.util.Map;
 
 public class ColormeShopSourceConnectorConfig extends AbstractConfig {
 
-  public static final String MY_SETTING_CONFIG = "my.setting";
-  private static final String MY_SETTING_DOC = "This is a setting important to my connector.";
+  public static final String ACCESS_TOKEN_CONFIG = "access_token";
+  private static final String ACCESS_TOKEN_DOC = "Access token";
 
   public ColormeShopSourceConnectorConfig(ConfigDef config, Map<String, String> parsedConfig) {
-    super(config, parsedConfig);
+      super(config, parsedConfig);
   }
 
   public ColormeShopSourceConnectorConfig(Map<String, String> parsedConfig) {
-    this(conf(), parsedConfig);
+      this(conf(), parsedConfig);
   }
 
   public static ConfigDef conf() {
-    return new ConfigDef()
-        .define(MY_SETTING_CONFIG, Type.STRING, Importance.HIGH, MY_SETTING_DOC);
+      return new ConfigDef().define(ACCESS_TOKEN_CONFIG, Type.STRING, Importance.HIGH, ACCESS_TOKEN_DOC);
   }
 
-  public String getMy(){
-    return this.getString(MY_SETTING_CONFIG);
+  public String getAccessToken(){
+      return this.getString(ACCESS_TOKEN_CONFIG);
   }
 }

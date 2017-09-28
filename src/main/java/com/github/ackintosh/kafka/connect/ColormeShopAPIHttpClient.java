@@ -11,14 +11,15 @@ import org.slf4j.LoggerFactory;
 
 public class ColormeShopAPIHttpClient {
     private static final Logger log = LoggerFactory.getLogger(ColormeShopAPIHttpClient.class);
+    private ColormeShopSourceConnectorConfig config;
 
-    public ColormeShopAPIHttpClient() {
-
+    public ColormeShopAPIHttpClient(ColormeShopSourceConnectorConfig config) {
+        this.config = config;
     }
 
     protected JSONArray getNextSales() throws InterruptedException {
         GetRequest request = Unirest.get("https://api.shop-pro.jp/v1/sales.json")
-                .header("Authorization", "Bearer xxx");
+                .header("Authorization", "Bearer " + config.getAccessToken());
         log.debug(String.format("GET %s", request.getUrl()));
 
         try {

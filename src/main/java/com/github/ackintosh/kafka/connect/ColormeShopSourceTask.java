@@ -17,6 +17,7 @@ import java.util.Map;
 public class ColormeShopSourceTask extends SourceTask {
   static final Logger log = LoggerFactory.getLogger(ColormeShopSourceTask.class);
 
+  private ColormeShopSourceConnectorConfig config;
   private ColormeShopAPIHttpClient colormeShopAPIHttpClient;
 
   @Override
@@ -27,7 +28,8 @@ public class ColormeShopSourceTask extends SourceTask {
   @Override
   public void start(Map<String, String> map) {
     System.out.println("------- start --------");
-    colormeShopAPIHttpClient = new ColormeShopAPIHttpClient();
+    config = new ColormeShopSourceConnectorConfig(map);
+    colormeShopAPIHttpClient = new ColormeShopAPIHttpClient(config);
   }
 
   @Override
