@@ -1,5 +1,6 @@
 package com.github.ackintosh.kafka.connect;
 
+import com.github.ackintosh.kafka.connect.model.Response;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
@@ -18,7 +19,7 @@ public class ColormeShopAPIHttpClient {
         this.config = config;
     }
 
-    protected JSONObject getNextSales() throws InterruptedException {
+    protected Response getNextSales() throws InterruptedException {
         GetRequest request = Unirest.get("https://api.shop-pro.jp/v1/sales.json")
                 .header("Authorization", "Bearer " + config.getAccessToken());
         log.debug(String.format("GET %s", request.getUrl()));
@@ -26,10 +27,10 @@ public class ColormeShopAPIHttpClient {
         try {
             HttpResponse<JsonNode> response = request.asJson();
             log.debug(String.format("%d: %s", response.getStatus(), response.getStatusText()));
-            return response.getBody().getObject();
+            return new Response(response.getBody().getObject());
         } catch (UnirestException e) {
             e.printStackTrace();
-            return new JSONObject();
+            return new Response(new JSONObject());
         }
     }
 }

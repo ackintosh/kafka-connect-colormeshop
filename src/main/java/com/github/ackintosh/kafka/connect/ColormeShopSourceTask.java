@@ -1,5 +1,6 @@
 package com.github.ackintosh.kafka.connect;
 
+import com.github.ackintosh.kafka.connect.model.Response;
 import org.apache.kafka.connect.data.Schema;
 import org.apache.kafka.connect.data.SchemaBuilder;
 import org.apache.kafka.connect.data.Struct;
@@ -36,9 +37,14 @@ public class ColormeShopSourceTask extends SourceTask {
   public List<SourceRecord> poll() throws InterruptedException {
       System.out.println("------- poll --------");
       final ArrayList<SourceRecord> records = new ArrayList<>();
-      JSONObject sales = colormeShopAPIHttpClient.getNextSales();
-      log.debug(String.format("Fetched %d record(s)", sales.length()));
-      records.add(generateSourceRecord(sales));
+      Response response = colormeShopAPIHttpClient.getNextSales();
+
+      JSONObject meta = response.getMeta();
+      log.debug(String.format("Fetched %d record(s)", meta.getInt("total")));
+
+      for (int i = 0; i < meta.getInt("total"); i++) {
+          records.add(generateSourceRecord(response.getSale(i)));
+      }
 
       return records;
   }
@@ -48,14 +54,14 @@ public class ColormeShopSourceTask extends SourceTask {
       //TODO: Do whatever is required to stop your task.
   }
 
-  private SourceRecord generateSourceRecord(JSONObject sales) {
+  private SourceRecord generateSourceRecord(JSONObject sale) {
       return new SourceRecord(
               sourcePartition(),
               sourceOffset(),
               "mysourcetopic",
               null, // partition will be inferred by the framework
               buildValueSchema(),
-              buildRecordValue(sales)
+              buildRecordValue(sale)
       );
   }
 
@@ -78,8 +84,8 @@ public class ColormeShopSourceTask extends SourceTask {
               .build();
   }
 
-  private Struct buildRecordValue(JSONObject sales) {
+  private Struct buildRecordValue(JSONObject sale) {
       return new Struct(buildValueSchema())
-              .put("testvalue", sales.toString());
+              .put("testvalue", sale.toString());
   }
 }
