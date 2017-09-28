@@ -5,7 +5,7 @@ import org.apache.kafka.connect.data.SchemaBuilder;
 import org.apache.kafka.connect.data.Struct;
 import org.apache.kafka.connect.source.SourceRecord;
 import org.apache.kafka.connect.source.SourceTask;
-import org.json.JSONArray;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,8 +36,8 @@ public class ColormeShopSourceTask extends SourceTask {
   public List<SourceRecord> poll() throws InterruptedException {
       System.out.println("------- poll --------");
       final ArrayList<SourceRecord> records = new ArrayList<>();
-      JSONArray sales = colormeShopAPIHttpClient.getNextSales();
-      log.debug(sales.toString());
+      JSONObject sales = colormeShopAPIHttpClient.getNextSales();
+      log.debug(String.format("Fetched %d record(s)", sales.length()));
       records.add(generateSourceRecord(sales));
 
       return records;
@@ -48,7 +48,7 @@ public class ColormeShopSourceTask extends SourceTask {
       //TODO: Do whatever is required to stop your task.
   }
 
-  private SourceRecord generateSourceRecord(JSONArray sales) {
+  private SourceRecord generateSourceRecord(JSONObject sales) {
       return new SourceRecord(
               sourcePartition(),
               sourceOffset(),
@@ -78,7 +78,7 @@ public class ColormeShopSourceTask extends SourceTask {
               .build();
   }
 
-  private Struct buildRecordValue(JSONArray sales) {
+  private Struct buildRecordValue(JSONObject sales) {
       return new Struct(buildValueSchema())
               .put("testvalue", sales.toString());
   }

@@ -6,6 +6,7 @@ import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import com.mashape.unirest.request.GetRequest;
 import org.json.JSONArray;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,7 +18,7 @@ public class ColormeShopAPIHttpClient {
         this.config = config;
     }
 
-    protected JSONArray getNextSales() throws InterruptedException {
+    protected JSONObject getNextSales() throws InterruptedException {
         GetRequest request = Unirest.get("https://api.shop-pro.jp/v1/sales.json")
                 .header("Authorization", "Bearer " + config.getAccessToken());
         log.debug(String.format("GET %s", request.getUrl()));
@@ -25,10 +26,10 @@ public class ColormeShopAPIHttpClient {
         try {
             HttpResponse<JsonNode> response = request.asJson();
             log.debug(String.format("%d: %s", response.getStatus(), response.getStatusText()));
-            return response.getBody().getArray();
+            return response.getBody().getObject();
         } catch (UnirestException e) {
             e.printStackTrace();
-            return new JSONArray();
+            return new JSONObject();
         }
     }
 }
