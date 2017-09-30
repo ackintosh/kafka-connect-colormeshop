@@ -60,7 +60,7 @@ public class ColormeShopSourceTask extends SourceTask {
               sourceOffset(),
               "mysourcetopic",
               null, // partition will be inferred by the framework
-              buildValueSchema(),
+              buildSaleSchema(),
               buildRecordValue(sale)
       );
   }
@@ -77,7 +77,7 @@ public class ColormeShopSourceTask extends SourceTask {
       return map;
   }
 
-  private Schema buildValueSchema() {
+  private Schema buildSaleSchema() {
       return SchemaBuilder.struct().name("com.github.ackintosh.kafka.connect.value")
               .version(1)
               .field("testvalue", Schema.STRING_SCHEMA)
@@ -85,7 +85,7 @@ public class ColormeShopSourceTask extends SourceTask {
   }
 
   private Struct buildRecordValue(JSONObject sale) {
-      return new Struct(buildValueSchema())
+      return new Struct(buildSaleSchema())
               .put("testvalue", sale.toString());
   }
 }
