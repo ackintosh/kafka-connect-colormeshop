@@ -29,32 +29,34 @@ class SchemaCoordinator {
     // Sale deliveries fields
     private static String SALE_DELIVERIES_DATA_FIELD = "data";
 
-    static Schema SALE_SCHEMA = SchemaBuilder.struct().name("com.github.ackintosh.kafka.connect.saleValue")
-            .version(1)
-            .field(SALE_ID_FIELD, Schema.INT64_SCHEMA)
-            .field(SALE_ACCOUNT_ID_FIELD, Schema.STRING_SCHEMA)
-            .field(SALE_MAKE_DATE_FIELD, Schema.INT64_SCHEMA)
-            .field(SALE_UPDATE_DATE_FIELD, Schema.INT64_SCHEMA)
-            .field(SALE_MOBILE_FIELD, Schema.BOOLEAN_SCHEMA)
-            .field(SALE_PAID_FIELD, Schema.BOOLEAN_SCHEMA)
-            .field(SALE_CUSTOMER_FIELD, SchemaCoordinator.CUSTOMER_SCHEMA)
-            .field(SALE_DETAILS_FIELD, SchemaCoordinator.DETAILS_SCHEMA)
-            .field(SALE_SALE_DELIVERIES_FIELD, SchemaCoordinator.SALE_DELIVERIES_SCHEMA)
-            .build();
-
     private static Schema CUSTOMER_SCHEMA = SchemaBuilder.struct().name("com.github.ackintosh.kafka.connect.customerValue")
             .version(1)
-            .field(CUSTOMER_ID_FIELD, Schema.INT64_SCHEMA)
+            .field(CUSTOMER_ID_FIELD, Schema.INT32_SCHEMA)
             .field(CUSTOMER_NAME_FIELD, Schema.STRING_SCHEMA)
             .field(CUSTOMER_FURIGANA_FIELD, Schema.STRING_SCHEMA)
             .build();
 
     private static Schema DETAILS_SCHEMA = SchemaBuilder.struct().name("com.github.ackintosh.kafka.connect.DetailValue")
+            .version(1)
             .field(DETAILES_DATA_FIELD, Schema.STRING_SCHEMA)
             .build();
 
     private static Schema SALE_DELIVERIES_SCHEMA = SchemaBuilder.struct().name("com.github.ackintosh.kafka.connect.SaleDeliveriesValue")
+            .version(1)
             .field(SALE_DELIVERIES_DATA_FIELD, Schema.STRING_SCHEMA)
+            .build();
+
+    static Schema SALE_SCHEMA = SchemaBuilder.struct().name("com.github.ackintosh.kafka.connect.saleValue")
+            .version(1)
+            .field(SALE_ID_FIELD, Schema.INT32_SCHEMA)
+            .field(SALE_ACCOUNT_ID_FIELD, Schema.STRING_SCHEMA)
+            .field(SALE_MAKE_DATE_FIELD, Schema.INT32_SCHEMA)
+            .field(SALE_UPDATE_DATE_FIELD, Schema.INT32_SCHEMA)
+            .field(SALE_MOBILE_FIELD, Schema.BOOLEAN_SCHEMA)
+            .field(SALE_PAID_FIELD, Schema.BOOLEAN_SCHEMA)
+            .field(SALE_CUSTOMER_FIELD, SchemaCoordinator.CUSTOMER_SCHEMA)
+            .field(SALE_DETAILS_FIELD, SchemaCoordinator.DETAILS_SCHEMA)
+            .field(SALE_SALE_DELIVERIES_FIELD, SchemaCoordinator.SALE_DELIVERIES_SCHEMA)
             .build();
 
     static Struct buildSaleValue(JSONObject sale) {
@@ -67,7 +69,7 @@ class SchemaCoordinator {
                 .put(SALE_PAID_FIELD, sale.get(SALE_PAID_FIELD))
                 .put(SALE_CUSTOMER_FIELD, buildCustomerValue(sale.getJSONObject(SALE_CUSTOMER_FIELD)))
                 .put(SALE_DETAILS_FIELD, buildDetailsValue(sale.getJSONArray(SALE_DETAILS_FIELD)))
-                .put(SALE_SALE_DELIVERIES_FIELD, buildSaleDeliveriesValue(sale.getJSONArray(SALE_ID_FIELD)));
+                .put(SALE_SALE_DELIVERIES_FIELD, buildSaleDeliveriesValue(sale.getJSONArray(SALE_SALE_DELIVERIES_FIELD)));
     }
 
     private static Struct buildCustomerValue(JSONObject customer) {
