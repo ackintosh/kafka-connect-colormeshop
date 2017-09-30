@@ -1,7 +1,6 @@
 package com.github.ackintosh.kafka.connect;
 
 import com.github.ackintosh.kafka.connect.model.Response;
-import org.apache.kafka.connect.data.Struct;
 import org.apache.kafka.connect.source.SourceRecord;
 import org.apache.kafka.connect.source.SourceTask;
 import org.json.JSONObject;
@@ -59,7 +58,7 @@ public class ColormeShopSourceTask extends SourceTask {
               "mysourcetopic",
               null, // partition will be inferred by the framework
               SchemaCoordinator.SALE_SCHEMA,
-              buildRecordValue(sale)
+              SchemaCoordinator.buildSaleValue(sale)
       );
   }
 
@@ -73,10 +72,5 @@ public class ColormeShopSourceTask extends SourceTask {
       Map<String, String> map = new HashMap<>();
       map.put("created_at", "2017-09-23");
       return map;
-  }
-
-  private Struct buildRecordValue(JSONObject sale) {
-      return new Struct(SchemaCoordinator.SALE_SCHEMA)
-              .put("testvalue", sale.toString());
   }
 }
