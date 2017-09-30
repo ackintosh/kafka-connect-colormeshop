@@ -1,6 +1,5 @@
 package com.github.ackintosh.kafka.connect;
 
-import org.apache.kafka.connect.data.Schema;
 import org.apache.kafka.connect.data.Struct;
 import org.json.JSONObject;
 import org.junit.Assert;
