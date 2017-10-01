@@ -11,6 +11,8 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.time.Instant;
+
 public class ColormeShopAPIHttpClient {
     private static final Logger log = LoggerFactory.getLogger(ColormeShopAPIHttpClient.class);
     private ColormeShopSourceConnectorConfig config;
@@ -19,8 +21,13 @@ public class ColormeShopAPIHttpClient {
         this.config = config;
     }
 
-    protected Response getNextSales() throws InterruptedException {
-        GetRequest request = Unirest.get("https://api.shop-pro.jp/v1/sales.json")
+    protected Response getNextSales(Instant lastMakeDate) throws InterruptedException {
+        System.out.println(lastMakeDate.toString());
+        String url = String.format(
+                "https://api.shop-pro.jp/v1/sales.json?after=%s",
+                lastMakeDate.toString()
+        );
+        GetRequest request = Unirest.get(url)
                 .header("Authorization", "Bearer " + config.getAccessToken());
         log.debug(String.format("GET %s", request.getUrl()));
 

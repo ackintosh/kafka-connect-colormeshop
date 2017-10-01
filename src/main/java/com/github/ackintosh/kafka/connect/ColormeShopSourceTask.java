@@ -1,12 +1,17 @@
 package com.github.ackintosh.kafka.connect;
 
 import com.github.ackintosh.kafka.connect.model.Response;
+import org.apache.kafka.connect.source.SourceConnector;
 import org.apache.kafka.connect.source.SourceRecord;
 import org.apache.kafka.connect.source.SourceTask;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.xml.validation.Schema;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -17,6 +22,8 @@ public class ColormeShopSourceTask extends SourceTask {
 
   private ColormeShopSourceConnectorConfig config;
   private ColormeShopAPIHttpClient colormeShopAPIHttpClient;
+  private int lastSaleId;
+  private Instant lastMakeDate;
 
   @Override
   public String version() {
@@ -28,13 +35,35 @@ public class ColormeShopSourceTask extends SourceTask {
       System.out.println("------- start --------");
       config = new ColormeShopSourceConnectorConfig(map);
       colormeShopAPIHttpClient = new ColormeShopAPIHttpClient(config);
+      initializeLastVariables();
   }
+
+    private void initializeLastVariables() {
+        Map<String, Object> lastSourceOffset = null;
+        lastSourceOffset = context.offsetStorageReader().offset(sourcePartition());
+        if (lastSourceOffset == null) {
+            // we haven't fetched anything yet, so we initialize to 7 days ago
+            lastSaleId = 0;
+            lastMakeDate = LocalDateTime.now().minusDays(7).toInstant(ZoneOffset.UTC);
+            return;
+        }
+
+        Object saleId = lastSourceOffset.get(SchemaCoordinator.SALE_ID_FIELD);
+        if (saleId != null && saleId instanceof String) {
+            lastSaleId = Integer.valueOf((String)saleId);
+        }
+
+        Object makeDate = lastSourceOffset.get(SchemaCoordinator.SALE_MAKE_DATE_FIELD);
+        if (makeDate != null && makeDate instanceof String) {
+            lastMakeDate = Instant.parse((String) makeDate);
+        }
+    }
 
   @Override
   public List<SourceRecord> poll() throws InterruptedException {
       System.out.println("------- poll --------");
       final ArrayList<SourceRecord> records = new ArrayList<>();
-      Response response = colormeShopAPIHttpClient.getNextSales();
+      Response response = colormeShopAPIHttpClient.getNextSales(lastMakeDate);
 
       JSONObject meta = response.getMeta();
       log.debug(String.format("Fetched %d record(s)", meta.getInt("total")));
@@ -54,7 +83,7 @@ public class ColormeShopSourceTask extends SourceTask {
   private SourceRecord generateSourceRecord(JSONObject sale) {
       return new SourceRecord(
               sourcePartition(),
-              sourceOffset(),
+              sourceOffset(sale),
               "mysourcetopic",
               null, // partition will be inferred by the framework
               SchemaCoordinator.SALE_SCHEMA,
@@ -64,13 +93,17 @@ public class ColormeShopSourceTask extends SourceTask {
 
   private Map<String, String> sourcePartition() {
       Map<String, String> map = new HashMap<>();
-      map.put("account_id", "test");
+      map.put("source_partition", "colormeshop");
       return map;
   }
 
-  private Map<String, String> sourceOffset() {
+  private Map<String, String> sourceOffset(JSONObject sale) {
       Map<String, String> map = new HashMap<>();
-      map.put("created_at", "2017-09-23");
+      map.put(SchemaCoordinator.SALE_ID_FIELD, Integer.toString(sale.getInt(SchemaCoordinator.SALE_ID_FIELD)));
+      map.put(
+              SchemaCoordinator.SALE_MAKE_DATE_FIELD,
+              Instant.ofEpochSecond(sale.getInt(SchemaCoordinator.SALE_MAKE_DATE_FIELD)).toString()
+      );
       return map;
   }
 }

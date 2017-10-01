@@ -12,9 +12,9 @@ import java.util.Date;
 
 class SchemaCoordinator {
     // Sale fields
-    private static String SALE_ID_FIELD = "id";
+    static String SALE_ID_FIELD = "id";
     private static String SALE_ACCOUNT_ID_FIELD = "account_id";
-    private static String SALE_MAKE_DATE_FIELD = "make_date";
+    static String SALE_MAKE_DATE_FIELD = "make_date";
     private static String SALE_UPDATE_DATE_FIELD = "update_date";
     private static String SALE_MOBILE_FIELD = "mobile";
     private static String SALE_PAID_FIELD = "paid";
