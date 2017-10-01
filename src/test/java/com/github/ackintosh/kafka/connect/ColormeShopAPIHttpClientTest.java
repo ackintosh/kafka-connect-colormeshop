@@ -18,6 +18,7 @@ public class ColormeShopAPIHttpClientTest {
         }
 
         Map<String, String> map = new HashMap();
+        map.put("topic", "test_topic");
         map.put("access_token", accessToken);
         ColormeShopSourceConnectorConfig config = new ColormeShopSourceConnectorConfig(map);
         ColormeShopAPIHttpClient client = new ColormeShopAPIHttpClient(config);

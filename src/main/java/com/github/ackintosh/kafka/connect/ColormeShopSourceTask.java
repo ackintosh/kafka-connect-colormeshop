@@ -87,7 +87,7 @@ public class ColormeShopSourceTask extends SourceTask {
         return new SourceRecord(
                 sourcePartition(),
                 sourceOffset(sale),
-                "mysourcetopic",
+                config.getTopic(),
                 null, // partition will be inferred by the framework
                 SchemaCoordinator.SALE_SCHEMA,
                 SchemaCoordinator.buildSaleValue(sale)
