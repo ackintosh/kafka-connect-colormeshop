@@ -21,7 +21,6 @@ public class ColormeShopAPIHttpClient {
     }
 
     protected Response getNextSales(Instant lastMakeDate) throws InterruptedException {
-        System.out.println(lastMakeDate.toString());
         String url = String.format(
                 "https://api.shop-pro.jp/v1/sales.json?after=%s",
                 lastMakeDate.toString()

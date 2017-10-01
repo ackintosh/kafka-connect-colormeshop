@@ -30,7 +30,6 @@ public class ColormeShopSourceTask extends SourceTask {
 
   @Override
   public void start(Map<String, String> map) {
-      System.out.println("------- start --------");
       config = new ColormeShopSourceConnectorConfig(map);
       colormeShopAPIHttpClient = new ColormeShopAPIHttpClient(config);
       initializeLastVariables();
@@ -59,7 +58,6 @@ public class ColormeShopSourceTask extends SourceTask {
 
   @Override
   public List<SourceRecord> poll() throws InterruptedException {
-      System.out.println("------- poll --------");
       final ArrayList<SourceRecord> records = new ArrayList<>();
       Response response = colormeShopAPIHttpClient.getNextSales(lastMakeDate);
 
