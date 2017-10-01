@@ -29,6 +29,12 @@ $ mvn clean package -Daccess_token=<your access token>
 $ mvn clean package -Dmaven.test.skip=true
 ```
 
+### Run tests
+
+```
+$ mvn test -Daccess_token=<your access token>
+```
+
 ### Running in development
 
 
