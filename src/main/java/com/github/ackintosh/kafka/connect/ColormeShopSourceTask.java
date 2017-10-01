@@ -1,14 +1,12 @@
 package com.github.ackintosh.kafka.connect;
 
 import com.github.ackintosh.kafka.connect.model.Response;
-import org.apache.kafka.connect.source.SourceConnector;
 import org.apache.kafka.connect.source.SourceRecord;
 import org.apache.kafka.connect.source.SourceTask;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.xml.validation.Schema;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
