@@ -11,39 +11,38 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class ColormeShopSourceConnector extends SourceConnector {
-  private static Logger log = LoggerFactory.getLogger(ColormeShopSourceConnector.class);
-  private ColormeShopSourceConnectorConfig config;
+    private static Logger log = LoggerFactory.getLogger(ColormeShopSourceConnector.class);
+    private ColormeShopSourceConnectorConfig config;
 
-  @Override
-  public String version() {
-    return VersionUtil.getVersion();
-  }
+    @Override
+    public String version() {
+        return VersionUtil.getVersion();
+    }
 
-  @Override
-  public void start(Map<String, String> map) {
-    config = new ColormeShopSourceConnectorConfig(map);
-  }
+    @Override
+    public void start(Map<String, String> map) {
+        config = new ColormeShopSourceConnectorConfig(map);
+    }
 
-  @Override
-  public Class<? extends Task> taskClass() {
-    return ColormeShopSourceTask.class;
-  }
+    @Override
+    public Class<? extends Task> taskClass() {
+        return ColormeShopSourceTask.class;
+    }
 
-  @Override
-  public List<Map<String, String>> taskConfigs(int i) {
-    ArrayList<Map<String, String>> configs = new ArrayList<>(1);
-    configs.add(config.originalsStrings());
+    @Override
+    public List<Map<String, String>> taskConfigs(int i) {
+        ArrayList<Map<String, String>> configs = new ArrayList<>(1);
+        configs.add(config.originalsStrings());
 
-    return configs;
-  }
+        return configs;
+    }
 
-  @Override
-  public void stop() {
-    //TODO: Do things that are necessary to stop your connector.
-  }
+    @Override
+    public void stop() {
+    }
 
-  @Override
-  public ConfigDef config() {
-    return ColormeShopSourceConnectorConfig.conf();
-  }
+    @Override
+    public ConfigDef config() {
+        return ColormeShopSourceConnectorConfig.conf();
+    }
 }
