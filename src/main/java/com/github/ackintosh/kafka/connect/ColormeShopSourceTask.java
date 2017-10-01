@@ -67,7 +67,14 @@ public class ColormeShopSourceTask extends SourceTask {
       log.debug(String.format("Fetched %d record(s)", meta.getInt("total")));
 
       for (int i = 0; i < meta.getInt("total"); i++) {
-          records.add(generateSourceRecord(response.getSale(i)));
+          JSONObject sale = response.getSale(i);
+          if (sale.getInt(SchemaCoordinator.SALE_ID_FIELD) <= lastSaleId) {
+              continue;
+          }
+
+          records.add(generateSourceRecord(sale));
+          lastSaleId = sale.getInt(SchemaCoordinator.SALE_ID_FIELD);
+          lastMakeDate = Instant.ofEpochSecond(sale.getInt(SchemaCoordinator.SALE_MAKE_DATE_FIELD));
       }
 
       return records;
