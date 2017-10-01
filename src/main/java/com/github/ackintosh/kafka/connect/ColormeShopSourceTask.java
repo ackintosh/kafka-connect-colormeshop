@@ -75,6 +75,7 @@ public class ColormeShopSourceTask extends SourceTask {
           lastMakeDate = Instant.ofEpochSecond(sale.getInt(SchemaCoordinator.SALE_MAKE_DATE_FIELD));
       }
 
+      Thread.sleep(1000);
       return records;
   }
 
