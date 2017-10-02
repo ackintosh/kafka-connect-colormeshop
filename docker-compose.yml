@@ -13,4 +13,35 @@ services:
       - 9581-9585:9581-9585
       - 9092:9092
     volumes:
-      - .target/kafka-connect-colormeshop-1.0-SNAPSHOT-package/share/java:/connectors
+      - ./target/kafka-connect-colormeshop-1.0-SNAPSHOT-package/share/java:/connectors
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:5.5.2
+    container_name: elasticsearch
+    environment:
+      - xpack.security.enabled=false
+      - xpack.monitoring.enabled=true
+      - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
+    ports:
+      - 9200:9200
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65536
+        hard: 65536
+    mem_limit: 2g
+    memswap_limit: 2g
+    cap_add:
+      - IPC_LOCK
+  kibana:
+    image: docker.elastic.co/kibana/kibana:5.5.2
+    container_name: kibana
+    environment:
+      ELASTICSEARCH_URL: "http://elasticsearch:9200"
+      XPACK_MONITORING_ELASTICSEARCH_URL: "http://elasticsearch:9200"
+      XPACK_SECURITY_ENABLED: "false"
+    ports:
+      - 5601:5601
+    depends_on:
+      - elasticsearch
