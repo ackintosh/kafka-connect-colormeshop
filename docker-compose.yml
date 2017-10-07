@@ -15,7 +15,7 @@ services:
     volumes:
       - ./target/kafka-connect-colormeshop-1.0-SNAPSHOT-package/share/java:/connectors
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:5.5.2
+    image: docker.elastic.co/elasticsearch/elasticsearch:5.6.2
     container_name: elasticsearch
     environment:
       - xpack.security.enabled=false
@@ -35,13 +35,14 @@ services:
     cap_add:
       - IPC_LOCK
   kibana:
-    image: docker.elastic.co/kibana/kibana:5.5.2
+    image: docker.elastic.co/kibana/kibana:5.6.2
     container_name: kibana
     environment:
-      ELASTICSEARCH_URL: "http://elasticsearch:9200"
       XPACK_MONITORING_ELASTICSEARCH_URL: "http://elasticsearch:9200"
       XPACK_SECURITY_ENABLED: "false"
     ports:
       - 5601:5601
     depends_on:
       - elasticsearch
+    volumes:
+    - ./kibana.yml:/usr/share/kibana/config/kibana.yml

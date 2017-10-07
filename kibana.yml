@@ -1,0 +1,13 @@
+server.name: kibana
+server.host: "0"
+elasticsearch.url: http://elasticsearch:9200
+elasticsearch.username: elastic
+elasticsearch.password: changeme
+xpack.monitoring.ui.container.elasticsearch.enabled: true
+regionmap:
+  layers:
+    - name: "Japan"
+      url: "https://s3-ap-northeast-1.amazonaws.com/ackintosh.geojson/japan.geojson"
+      fields:
+        - name: "id"
+          description: "Prefecture id"
